@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Airtime — Your Name</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gabarito:you@example.com&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="images/example-1.jpg" defer></script>
+</head>
+<body class="accent-airtime">
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="page">
+
+  <!-- SIDEBAR - identical on every page apart from aria-current="page",
+       which marks where you are. Keep it in step across every file.
+
+       There is no Home link: the name above is the way back.
+
+       Every link has a filled square and no two share a colour. The colour
+       class on a link sets both its square and its hover tint, so a link is
+       always tinted in the colour of where it goes. The colours are defined
+       at the top of styles.css.
+
+       Professional, Personal and Stay in touch are group labels, not links.
+
+       At the foot are the places to find me elsewhere. The marks are drawn
+       to one weight and take their own colour on hover, so they read as a
+       set rather than four borrowed logos at four different sizes.
+
+       The Menu button is invisible until the window is narrow enough for the
+       sidebar to become a top bar, at which point it opens this same list. -->
+  <aside class="sidebar">
+    <a class="site-name" href="index.html">Your Name</a>
+    <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+
+    <nav class="site-nav" id="site-nav" aria-label="Where to find you">
+      <ul>
+        <li><a class="accent-about" href="about.html"><span class="swatch"></span>About</a></li>
+      </ul>
+
+      <p class="nav-group-label">Professional</p>
+      <ul>
+        <li><a class="accent-background" href="background.html"><span class="swatch"></span>Background</a></li>
+        <li><a class="accent-airtime" href="airtime.html" aria-current="page"><span class="swatch"></span>Airtime</a></li>
+        <li><a class="accent-projects" href="projects.html"><span class="swatch"></span>Projects</a></li>
+      </ul>
+
+      <p class="nav-group-label">Personal</p>
+      <ul>
+        <li><a class="accent-exploring" href="exploring.html"><span class="swatch"></span>Exploring</a></li>
+        <li><a class="accent-reading" href="reading.html"><span class="swatch"></span>Reading</a></li>
+        <li><a class="accent-listening" href="listening.html"><span class="swatch"></span>Listening</a></li>
+        <li><a class="accent-using" href="using.html"><span class="swatch"></span>Using</a></li>
+      </ul>
+
+      <p class="nav-group-label">Stay in touch</p>
+      <ul>
+        <li><a class="accent-collaborations" href="collaborations.html"><span class="swatch"></span>Collaborate</a></li>
+        <li><a class="accent-contact" href="contact.html"><span class="swatch"></span>Contact</a></li>
+      </ul>
+
+      <div class="social">
+        <a class="accent-linkedin" href="#" target="_blank" rel="noopener" title="Where to find you" aria-label="Where to find you"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#0A66C2" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zm7 0h3.8v1.65h.05c.53-.95 1.83-1.95 3.76-1.95C21.2 8.7 22 11.05 22 14.15V21h-4v-6c0-1.43-.03-3.27-2-3.27s-2.3 1.56-2.3 3.17V21h-4z"/></svg></a>
+        <a class="accent-newsletter" href="#" target="_blank" rel="noopener" title="Where to find you" aria-label="Where to find you"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#FF6719" d="M3 3h18v3H3zm0 5.5h18v3H3zM3 14v7l9-4.2 9 4.2v-7z"/></svg></a>
+        <a class="accent-reading" href="#" target="_blank" rel="noopener" title="Where to find you" aria-label="Where to find you"><svg viewBox="0 0 512 512" aria-hidden="true" focusable="false"><path fill="#814910" d="m380 73h-35v37c-54-75-165-51-196 23-20 48-19 96 2 144 22 50 85 71 135 57 16-3 32-11 43-21 6-5 12-10 16-15-1 19-2 38-5 56-4 23-14 43-36 54-48 25-105 6-126-43h-33c2 32 19 53 46 66 32 16 66 18 100 12 44-7 73-32 83-76 4-16 5-32 6-48 .9-90-.2-173 .2-246zm-40 178c-6 18-17 32-31 42-3 2-20 14-45 15-1 .1-6 .2-11 0-.2 .1-.3 .1-.6 .1-36-2-63-23-75-58-10-29-10-59-3-88 11-43 42-69 81-70 .9-.1 1-.1 1-.1 20-2 36 7 42 9 21 11 37 32 44 61 7 30 8 60-2 89z"/></svg></a>
+        <a class="accent-listening" href="#" target="_blank" rel="noopener" title="Where to find you" aria-label="Where to find you"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#1DB954" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.6 14.4a.75.75 0 0 1-1.03.25c-2.82-1.72-6.37-2.11-10.55-1.16a.75.75 0 1 1-.33-1.46c4.57-1.04 8.5-.59 11.66 1.34.35.21.46.67.25 1.03zm1.23-2.74a.94.94 0 0 1-1.29.31c-3.23-1.98-8.15-2.56-11.97-1.4a.94.94 0 1 1-.54-1.8c4.37-1.32 9.79-.68 13.5 1.6.44.27.58.85.3 1.29zm.11-2.86C14.07 8.5 7.9 8.29 4.2 9.41a1.12 1.12 0 1 1-.65-2.15C7.8 5.97 14.62 6.22 18.9 8.76a1.12 1.12 0 1 1-1.15 1.93z"/></svg></a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="content">
+
+  <main id="main">
+    <h1 class="page-title">Airtime</h1>
+
+    <div class="prose">
+      <p class="tk">One paragraph about this entry. Two to four sentences is about right; the column is set to a comfortable measure, so let it run.</p>
+    </div>
+
+    <!-- ================================================================
+         HOW TO ADD A PIECE OR A TALK
+
+         Entries run newest first inside each sub-section. When you add one,
+         put it at the top of its list.
+
+         The page is organised in two levels:
+           <h2 class="group-title">     Writing, Speaking, Press
+           <h3 class="subgroup-title">  the sub-headings within a section
+
+         Every entry is one <article class="row"> block — the image, carousel
+         or player on the left, the text on the right. Copy one and edit:
+
+         1. The media on the left. Three kinds are used below:
+              a single <figure class="media">        for a written piece
+              a <div class="carousel">               for a talk with photos
+              a <div class="embed">                  for a podcast
+            Add or remove <figure class="media"> blocks inside a carousel
+            track; the arrows and counter adjust on their own and disappear
+            when there is only one photo. Put files in images/ and point the
+            src at them — until a file exists you get a grey block with the
+            filename printed in it. Change --ratio to re-crop.
+         2. The organisation's logo in <div class="row-logo">. Delete that
+            whole <div> if there is no logo worth showing.
+         3. The <p class="meta"> line — publication or event, and the date.
+         4. The <h2 class="row-title"> — the title. Where there is somewhere
+            to send people, wrap it in an <a>; where there is not, leave it
+            as plain text rather than linking to nowhere.
+         5. The <p> blurb — two to four sentences. Delete class="tk".
+         6. The links in <p class="links"> — slides, recording, event page.
+            Delete any you do not need, or delete the whole <p>.
+
+         The id on each <article> lets you link straight to it from elsewhere,
+         for example airtime.html#oii-podcast.
+         ================================================================ -->
+
+    <h2 class="group-title">Writing</h2>
+
+    <h3 class="subgroup-title">Newsletter</h3>
+
+    <!-- ROW -->
+    <article class="row" id="entry-1">
+      <div class="row-media">
+        <figure class="media" style="--ratio: 3/2">
+          <img src="images/example-2.jpg" alt="">
+        </figure>
+      </div>
+      <div class="row-body">
+        <div class="row-logo"><img src="images/example-3.jpg" alt=""></div>
+        <p class="meta tk">Organisation, dates</p>
+        <h2 class="row-title tk">The name of this entry</h2>
+        <p class="tk">One paragraph about this entry. Two to four sentences is about right; the column is set to a comfortable measure, so let it run.</p>
+      </div>
+    </article>
+
+    <!-- ROW -->
+    <article class="row" id="entry-2">
+      <div class="row-media">
+        <figure class="media" style="--ratio: 3/2">
+          <img src="images/example-4.jpg" alt="">
+        </figure>
+      </div>
+      <div class="row-body">
+        <div class="row-logo"><img src="images/example-1.jpg" alt=""></div>
+        <p class="meta tk">Organisation, dates</p>
+        <h2 class="row-title tk">The name of this entry</h2>
+        <p class="tk">One paragraph about this entry. Two to four sentences is about right; the column is set to a comfortable measure, so let it run.</p>
+      </div>
+    </article>
+
+
+
+    <h3 class="subgroup-title">Publications</h3>
+
+
+
+    <!-- ROW -->
+
+
+
+    <h2 class="group-title">Speaking</h2>
+
+
+
+
+
+
+
+
+
+    <!-- Coverage of your work by other people, rather than your own writing.
+         Delete the whole group if there is none yet. -->
+    <h2 class="group-title">Press</h2>
+
+
+
+  </main>
+
+  <footer class="site-footer">
+    <a class="footer-contact" href="contact.html">Get in touch</a>
+    <p class="meta">&copy; <span data-year>2026</span> Your Name</p>
+  </footer>
+
+  </div>
+
+</div>
+</body>
+</html>

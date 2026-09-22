@@ -1,0 +1,1110 @@
+/* ============================================================
+   Your Name — styles.css
+
+   Type:    Gabarito for anything that labels or heads something — the name,
+            page and group titles, the nav, all metadata. Newsreader for
+            anything you actually read — body copy, blurbs, entry titles.
+            A friendly geometric over a proper reading serif.
+   Colour:  white paper, ink text, and one bright accent per section.
+            Each accent has three values:
+              --accent       the bright one — rules, squares, edges, borders
+              --accent-ink   a deeper version — text, and fills behind text
+              --accent-soft  a pale wash — hover backgrounds
+            Bright colour never carries text directly, which is what keeps it
+            legible. Set a page's accent with the class on <body>.
+   Motion:  hover and click only, 160ms. Nothing animates on scroll.
+   Rules:   a hairline separates items, an accent rule separates groups.
+            No cards, no shadows, no radii.
+   ============================================================ */
+
+:root {
+  --paper:    #FFFFFF;
+  --ink:      #15171A;
+  --muted:    #6B7178;
+  --hairline: #E9E9E6;
+  --fill:     #F1F1EF;  /* missing-image block */
+
+  /* default accent, overridden by the class on <body> */
+  --accent:      #6C7CFF;
+  --accent-ink:  #4351DB;
+  --accent-soft: #EEEFFF;
+
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;      /* reading */
+  --sans:  "Gabarito", "Helvetica Neue", Arial, sans-serif;      /* headings, nav, metadata */
+
+  --page-max: 1180px;
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --prose: 66ch;
+  --t: 160ms;
+}
+
+/* ---------- the accents ----------
+   Put one of these on <body>. In the sidebar each link carries its own, so a
+   link is tinted in the colour of the page it leads to. On the home page the
+   section blocks do the same. */
+
+.accent-home,
+.accent-contact        { --accent: #6C7CFF; --accent-ink: #4351DB; --accent-soft: #EEEFFF; } /* periwinkle */
+.accent-about          { --accent: #3ECF9A; --accent-ink: #0C7A53; --accent-soft: #E4F8EF; } /* mint */
+.accent-airtime        { --accent: #FF8A5B; --accent-ink: #B2491B; --accent-soft: #FFEFE7; } /* peach */
+.accent-background,
+.accent-leadership     { --accent: #B07CFF; --accent-ink: #7038D9; --accent-soft: #F4EDFF; } /* lavender */
+.accent-projects       { --accent: #E5484D; --accent-ink: #A31519; --accent-soft: #FDEAEA; } /* red */
+.accent-exploring      { --accent: #12B3A0; --accent-ink: #07685C; --accent-soft: #DEF5F2; } /* teal */
+.accent-collaborations { --accent: #FF7BA8; --accent-ink: #C33668; --accent-soft: #FFECF2; } /* rose */
+.accent-reading        { --accent: #FFD34E; --accent-ink: #8A6500; --accent-soft: #FFF7DD; } /* lemon */
+.accent-listening      { --accent: #4FC3F7; --accent-ink: #0E6E9C; --accent-soft: #E4F5FD; } /* sky */
+.accent-using          { --accent: #A8DB4B; --accent-ink: #5E7D10; --accent-soft: #F0F7DF; } /* lime */
+.accent-linkedin       { --accent: #2BD4BD; --accent-ink: #0A7A6D; --accent-soft: #E0F8F4; } /* turquoise */
+.accent-newsletter     { --accent: #E86BD4; --accent-ink: #A3218C; --accent-soft: #FBE9F7; } /* fuchsia */
+
+/* ---------- reset ---------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  line-height: 1.55;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, p, figure, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+img { display: block; max-width: 100%; }
+button { font: inherit; }
+
+/* Sidebar on the left, content on the right. The sidebar stays put while the
+   content scrolls. Below 900px the whole thing becomes a normal top bar. */
+.page {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  column-gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: start;
+}
+.content { min-width: 0; padding-top: 2.25rem; }
+
+/* ---------- links ---------- */
+
+a {
+  color: var(--accent-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: text-decoration-thickness var(--t) ease, color var(--t) ease;
+}
+a:hover { text-decoration-thickness: 2px; }
+
+:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 3px; }
+
+.skip {
+  position: absolute; left: -9999px;
+  font-family: var(--sans); font-size: 0.875rem;
+}
+.skip:focus {
+  left: var(--gutter); top: 0.75rem;
+  background: var(--paper); padding: 0.5rem 0.75rem;
+  border: 1px solid var(--ink); z-index: 10;
+}
+
+/* ---------- sidebar ---------- */
+
+.sidebar {
+  position: sticky; top: 0;
+  max-height: 100vh; overflow-y: auto;
+  padding: 2.25rem 0 2rem;
+  display: flex; flex-direction: column; gap: 1.75rem;
+}
+
+/* On the home page the name is also the page's heading, so it is wrapped in an
+   <h1> there. This keeps that <h1> from changing how it looks. */
+.site-name-wrap { font: inherit; margin: 0; }
+
+.site-name {
+  display: block;
+  font-family: var(--sans);
+  font-size: clamp(1.375rem, 1.2rem + 0.5vw, 1.625rem);
+  font-weight: 700; letter-spacing: -0.025em; line-height: 1.15;
+  color: var(--ink); text-decoration: none;
+}
+.site-name:hover { color: var(--accent-ink); }
+
+.site-nav ul { display: flex; flex-direction: column; gap: 0.1rem; }
+
+/* Each link carries its own section's colour class, so the square, the hover
+   tint and the active mark are the colour of the page it leads to. */
+.site-nav a {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-family: var(--sans); font-size: 0.9375rem;
+  color: var(--ink); text-decoration: none;
+  padding: 0.38rem 0.5rem;
+  border-left: 2px solid transparent;
+  transition: background-color var(--t) ease, color var(--t) ease, border-color var(--t) ease;
+}
+.site-nav a:hover { background: var(--accent-soft); color: var(--accent-ink); }
+.site-nav a[aria-current="page"] {
+  border-left-color: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 500;
+}
+
+/* Every link in the sidebar has a filled square, and no two share a colour.
+   The only thing that marks a link as leaving the site is the arrow. */
+.swatch {
+  width: 0.5rem; height: 0.5rem; flex: 0 0 auto;
+  background: var(--accent);
+}
+
+.ext { margin-left: auto; font-size: 0.8125rem; color: var(--muted); line-height: 1; }
+
+/* The places to find me elsewhere, as marks rather than another list of
+   words. Each carries its own colour class, so it tints on hover. */
+.social {
+  display: flex; flex-wrap: wrap; gap: 0.45rem;
+  margin-top: 1.5rem; padding-top: 1.25rem;
+  border-top: 1px solid var(--hairline);
+}
+.social a {
+  display: grid; place-items: center;
+  width: 2.2rem; height: 2.2rem;
+  border: 1px solid var(--hairline);
+  color: var(--muted);
+  transition: border-color var(--t) ease, background-color var(--t) ease, color var(--t) ease;
+}
+.social a:hover { border-color: var(--accent); background: var(--accent-soft); }
+/* the marks carry their own brand colours, so nothing here overrides fill */
+.social svg { width: 17px; height: 17px; display: block; }
+
+/* Only appears once the sidebar has become a top bar. */
+.nav-toggle {
+  display: none;
+  appearance: none; cursor: pointer;
+  background: none; border: 1px solid var(--hairline);
+  color: var(--ink);
+  font-family: var(--sans); font-size: 0.875rem; font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  transition: border-color var(--t) ease, color var(--t) ease;
+}
+.nav-toggle:hover { border-color: var(--accent); color: var(--accent-ink); }
+
+.nav-group-label {
+  font-family: var(--sans); font-size: 0.75rem; color: var(--muted);
+  margin: 1.5rem 0 0.45rem 0.5rem;
+}
+
+/* ---------- footer ---------- */
+
+.site-footer {
+  margin-top: 6rem;
+  padding: 1.75rem 0 3rem;
+  border-top: 1px solid var(--hairline);
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  justify-content: space-between; gap: 1rem 2rem;
+}
+.footer-contact {
+  font-family: var(--sans); font-size: 1rem; font-weight: 500;
+  color: var(--ink); text-decoration: none;
+  border-bottom: 2px solid var(--accent); padding-bottom: 2px;
+  transition: color var(--t) ease, background-color var(--t) ease;
+}
+.footer-contact:hover { color: var(--accent-ink); background: var(--accent-soft); }
+
+/* ---------- images and missing-image blocks ---------- */
+
+.media {
+  position: relative;
+  aspect-ratio: var(--ratio, 3 / 2);
+  overflow: hidden;
+  background: var(--fill);
+}
+.media img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform var(--t) ease;
+}
+.media a { display: block; width: 100%; height: 100%; position: relative; }
+
+/* a clickable photo lifts slightly and takes an accent edge */
+.media a::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  box-shadow: inset 0 0 0 0 var(--accent);
+  transition: box-shadow var(--t) ease;
+}
+.media a:hover::after,
+.media a:focus-visible::after { box-shadow: inset 0 0 0 3px var(--accent); }
+.media a:hover img,
+.media a:focus-visible img { transform: scale(1.04); }
+
+/* the label that rises out of the bottom of a clickable photo, built from the
+   image's alt text by site.js */
+.media-label {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 0.5rem 0.65rem;
+  background: var(--accent-ink); color: var(--paper);
+  font-family: var(--sans); font-size: 0.75rem; line-height: 1.3;
+  transform: translateY(101%);
+  transition: transform var(--t) ease;
+}
+.media a:hover .media-label,
+.media a:focus-visible .media-label { transform: translateY(0); }
+
+.media--logo { background: none; }
+.media--logo img { object-fit: contain; object-position: left center; }
+
+.placeholder {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0.75rem; text-align: center;
+  background: var(--fill); color: #858C91;
+  font-family: var(--sans); font-size: 0.75rem; line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- prose ---------- */
+
+.prose p { max-width: var(--prose); margin: 0 0 1.3em; }
+.prose p:last-child { margin-bottom: 0; }
+.prose figure { margin: 2.5rem 0; }
+.prose figcaption { margin-top: 0.6rem; max-width: var(--prose); }
+
+/* The opening paragraph of a page's prose, set larger than the rest. */
+.prose > .lead {
+  font-size: clamp(1.1875rem, 1.1rem + 0.4vw, 1.375rem);
+  line-height: 1.45;
+}
+
+/* A labelled set of things that are a list rather than a sentence. Each one
+   takes a different colour from the site's palette. */
+.interests {
+  border-top: 1px solid var(--hairline);
+  padding-top: 1rem;
+  margin-top: 2rem;
+}
+.interests .meta { display: block; margin-bottom: 0.6rem; }
+.interest-tags {
+  display: flex; flex-wrap: wrap; gap: 0.45rem;
+  list-style: none; margin: 0; padding: 0;
+}
+.interest-tags li {
+  font-family: var(--sans); font-size: 0.8125rem; line-height: 1.3;
+  padding: 0.4rem 0.8rem;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  border-left: 3px solid var(--accent);
+}
+
+/* The places to find me, as equal tiles rather than links of ragged length.
+   The marks are drawn to one weight and take their tile's colour, so they read
+   as a set instead of four borrowed logos at four different sizes. */
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.6rem;
+  max-width: 34rem;
+  margin-top: 1.75rem;
+}
+.brand-grid a {
+  display: flex; align-items: center; gap: 0.7rem;
+  font-family: var(--sans); font-size: 0.9375rem; font-weight: 500;
+  color: var(--ink); text-decoration: none;
+  border: 1px solid var(--hairline);
+  padding: 0.8rem 0.95rem;
+  transition: border-color var(--t) ease, background-color var(--t) ease, color var(--t) ease;
+}
+.brand-grid a:hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-ink); }
+.brand-grid svg { width: 20px; height: 20px; flex: 0 0 20px; }
+
+.prose > .links {
+  font-family: var(--sans); font-size: 0.875rem;
+  margin-top: 1.35rem;
+}
+
+/* A link that leads somewhere with a logo — the mark does the identifying,
+   the words say what you will find. */
+.brand-link {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  color: var(--ink); text-decoration: none;
+  border: 1px solid var(--hairline);
+  padding: 0.5rem 0.9rem 0.5rem 0.7rem;
+  transition: border-color var(--t) ease, background-color var(--t) ease, color var(--t) ease;
+}
+.brand-link img { height: 20px; width: auto; display: block; }
+.brand-link:hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-ink); }
+
+.figure-inset { max-width: var(--prose); }
+.figure-wide { max-width: 880px; }
+.figure-portrait { max-width: 420px; }
+
+.tk { color: var(--muted); font-style: italic; }
+.meta.tk { font-style: normal; }
+a.tk, .row-title a.tk { color: var(--muted); }
+
+.meta {
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+/* ---------- home hero ---------- */
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  column-gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+/* The opening line is set larger because it is the introduction, not because
+   big text looks nice. Everything after it is ordinary body size. */
+.hero-bio p:first-child {
+  font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  line-height: 1.4;
+}
+
+/* The two ways on from the hero, stacked. Each is underlined in the colour of
+   the page it leads to, and its arrow moves on hover. */
+.hero-actions {
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: 0.9rem;
+  margin-top: 1.75rem;
+}
+.hero-action {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-family: var(--sans); font-size: 1rem; font-weight: 500;
+  color: var(--ink); text-decoration: none;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 0.3rem;
+  transition: color var(--t) ease;
+}
+.hero-action:hover { color: var(--accent-ink); }
+.hero-action .arrow { transition: transform var(--t) ease; }
+.hero-action:hover .arrow { transform: translateX(4px); }
+
+/* ---------- home sections ---------- */
+
+.sections { margin-top: clamp(3rem, 6vw, 4.5rem); }
+
+/* One block per section: the text on one side, a carousel of previews on the
+   other, alternating down the page. Every preview is its own link. */
+.section-block {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: center;
+  border-top: 2px solid var(--accent);
+  padding: 2rem 0 2.5rem;
+}
+.section-text { grid-column: 1; grid-row: 1; }
+.section-block > .carousel { grid-column: 2; grid-row: 1; }
+
+/* the other way round */
+.section-block--flip { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); }
+.section-block--flip .section-text { grid-column: 2; }
+.section-block--flip > .carousel { grid-column: 1; }
+.section-block h2 { font-family: var(--sans); font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em; line-height: 1.2; }
+.section-block h2 a {
+  color: var(--ink); text-decoration: none;
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 0% 3px; background-repeat: no-repeat;
+  background-position: left calc(100% - 2px);
+  transition: background-size var(--t) ease, color var(--t) ease;
+  padding-bottom: 3px;
+}
+.section-block h2 a:hover { background-size: 100% 3px; color: var(--accent-ink); }
+.section-block .meta { margin-top: 0.5rem; max-width: 40ch; }
+
+/* ---------- page title and group headings ---------- */
+
+.page-title {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em; line-height: 1.2;
+  margin: 2.5rem 0 1.75rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 4px solid var(--accent);
+}
+
+.group-title {
+  font-family: var(--sans);
+  font-size: 1.125rem; font-weight: 700; letter-spacing: -0.015em; line-height: 1.2;
+  border-top: 2px solid var(--accent);
+  padding-top: 0.75rem;
+  margin: 3.5rem 0 1.5rem;
+  scroll-margin-top: 1.5rem; /* the sidebar links straight to these */
+}
+
+/* A heading inside a group, for a sub-section within a section. Smaller
+   than a group title and without its rule, so the nesting reads. */
+.subgroup-title {
+  font-family: var(--sans);
+  font-size: 0.9375rem; font-weight: 600; letter-spacing: -0.01em;
+  color: var(--muted);
+  margin: 2.75rem 0 0.25rem;
+}
+.group-title + .subgroup-title { margin-top: 0.25rem; }
+
+/* ---------- rows ---------- */
+
+/* Media on the left, text on the right. The media column is capped so the
+   split survives a narrow window instead of collapsing into a stack. */
+.row {
+  display: grid;
+  grid-template-columns: clamp(170px, 33%, 380px) minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  scroll-margin-top: 1.5rem; /* so a link straight to a row does not land flush against the top */
+  padding: clamp(2.25rem, 4vw, 3.25rem) 0;
+  border-top: 1px solid var(--hairline);
+}
+.group-title + .row { border-top: none; }
+
+/* An entry with no picture yet. Without this the text would sit in the narrow
+   right-hand column with an empty space beside it. Delete the class from the
+   <article> once there is an image to put back. */
+.row--text { grid-template-columns: minmax(0, 1fr); }
+
+.row--org { grid-template-columns: 110px minmax(0, 1fr); gap: 2rem; }
+
+/* Airtime mixes cover images with logos in the same list. The logo rows take
+   the same column width as the image rows so the text lines up all the way
+   down the page; the logo itself stays small at the top of that column. */
+.accent-airtime .row--org {
+  grid-template-columns: clamp(170px, 33%, 380px) minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+}
+/* centred in that wider column rather than pinned to its left edge */
+.accent-airtime .row--org .media--logo { width: 110px; margin-inline: auto; }
+.accent-airtime .row--org .media--logo img { object-position: center; }
+
+/* A drawn mark for the things that have no logo — it sits where an
+   organisation's logo would, so the left column always says what the entry is
+   rather than showing one photo as if it stood for the whole thing. */
+.row-icon svg {
+  width: 60px; height: 60px;
+  fill: none; stroke: var(--accent); stroke-width: 1.75;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* the organisation's logo, sitting above the metadata line in a row */
+.row-logo { width: 150px; height: 34px; margin-bottom: 0.7rem; position: relative; overflow: hidden; }
+.row-logo img { height: 100%; width: auto; max-width: 100%; object-fit: contain; object-position: left center; }
+.row-logo .placeholder { font-size: 0.5625rem; padding: 0.2rem; background: none; }
+
+.row-body { max-width: var(--prose); }
+.row-body > p { margin-top: 0.75rem; }
+.row-body > p:first-child { margin-top: 0; }
+
+.row-title {
+  font-size: 1.3125rem; font-weight: 500; line-height: 1.25;
+  margin-top: 0.3rem;
+}
+.row-title a { color: var(--ink); text-decoration: none; }
+.row-title a:hover { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 2px; }
+
+/* The degree line under a school's name — subordinate to the title, so it is
+   set small and italic rather than as another heading. */
+.row-body > .row-subtitle {
+  font-family: var(--serif); font-style: italic;
+  font-size: 1rem; line-height: 1.4; color: var(--muted);
+  margin-top: 0.3rem;
+}
+
+.row-body > .links {
+  display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem;
+  font-family: var(--sans); font-size: 0.875rem;
+  margin-top: 1.2rem;
+}
+
+/* sub-entries — several roles under one organisation */
+
+.subentries { margin-top: 1.75rem; }
+.subentry {
+  padding-top: 1.1rem; margin-top: 1.1rem;
+  border-top: 1px solid var(--hairline);
+}
+.subentry h3 { font-family: var(--sans); font-size: 1rem; font-weight: 600; line-height: 1.3; margin-top: 0.2rem; }
+.subentry p:last-child { margin-top: 0.4rem; }
+
+/* ---------- the map ----------
+   An equirectangular world, so a pin's longitude and latitude become its x and
+   y directly. Drag to move, buttons to zoom. The pins counter-scale as you zoom
+   so they stay the same size on screen. */
+
+.map { margin-top: 1.5rem; }
+
+.map-viewport {
+  position: relative; overflow: hidden;
+  aspect-ratio: 2.6 / 1;
+  background: var(--accent-soft);
+  border: 1px solid var(--hairline);
+  cursor: grab;
+  touch-action: none;
+}
+.map-viewport.is-dragging { cursor: grabbing; }
+
+.map-canvas { position: absolute; inset: 0; transform-origin: 0 0; }
+.map-base { width: 100%; height: 100%; display: block; pointer-events: none; -webkit-user-drag: none; user-select: none; }
+
+/* A pin is a zero-size anchor at its coordinates; everything hangs off it.
+   The map is cropped to longitudes -145..125 and latitudes 72..-32, so those
+   are the numbers the position is worked out against. */
+.pin {
+  position: absolute;
+  left: calc((var(--lon) + 145) / 270 * 100%);
+  top: calc((72 - var(--lat)) / 104 * 100%);
+  width: 0; height: 0;
+  color: var(--ink); text-decoration: none;
+  z-index: 1;
+}
+/* whichever pin you are on comes to the front, so its card is never buried
+   under the pin next door */
+.pin:hover, .pin:focus-within, .pin:focus-visible, .pin.is-open { z-index: 5; }
+/* A real map pin: a square with three rounded corners, turned so the square
+   corner points down at the coordinate. The one place on the site with a
+   radius, because a pin is a pin. */
+.pin-dot {
+  position: absolute; left: 0; top: 0;
+  width: 23px; height: 23px;
+  background: var(--accent);
+  border: 2px solid var(--paper);
+  border-radius: 50% 50% 50% 0;
+  transform:
+    translate(calc(-50% + var(--nudge-x, 0px)), calc(-118% + var(--nudge-y, 0px)))
+    rotate(-45deg)
+    scale(var(--inv, 1));
+  transform-origin: 50% 68%;
+  transition: filter var(--t) ease;
+}
+/* the stop number, turned back upright inside the rotated pin */
+.pin-no {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  font-family: var(--sans); font-size: 11px; font-weight: 700; line-height: 1;
+  color: var(--paper);
+}
+.pin:hover .pin-dot,
+.pin.is-open .pin-dot,
+.pin:focus-visible .pin-dot { filter: drop-shadow(0 0 0 var(--accent)) brightness(0.88); }
+
+/* The route between them, drawn in the same coordinate space as the map. */
+.map-route {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+/* Widths are divided by the zoom so the dashes stay the same on screen
+   however far in you go, exactly like the pins. Kept light — it is a trace of
+   where I went, not a thing to read. */
+.map-route path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: calc(1.25px * var(--inv, 1));
+  stroke-dasharray: calc(2px * var(--inv, 1)) calc(7px * var(--inv, 1));
+  stroke-linecap: round;
+  opacity: 0.3;
+}
+
+.pin-card {
+  position: absolute; left: 0; top: 0;
+  transform: translate(calc(14px + var(--nudge-x, 0px)), calc(-50% + var(--nudge-y, 0px))) scale(var(--inv, 1));
+  transform-origin: 0 50%;
+  width: 15rem; padding: 0.7rem 0.85rem;
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  border-left: 3px solid var(--accent);
+  opacity: 0; visibility: hidden;
+  transition: opacity var(--t) ease;
+  pointer-events: none;
+}
+/* is-open is what a tap sets on a touch screen, where there is no hover: the
+   first tap opens the card, the second follows the link. See site.js. */
+.pin:hover .pin-card,
+.pin.is-open .pin-card,
+.pin:focus-visible .pin-card { opacity: 1; visibility: visible; }
+.pin-card strong {
+  display: block;
+  font-family: var(--sans); font-size: 0.9375rem; font-weight: 700; letter-spacing: -0.015em;
+}
+.pin-card .meta { margin-top: 0.1rem; }
+.pin-card p { font-size: 0.875rem; line-height: 1.4; margin-top: 0.35rem; }
+
+/* pins on the right-hand side open their card to the left instead */
+.pin--flip .pin-card { transform: translate(calc(-14px + var(--nudge-x, 0px)), calc(-50% + var(--nudge-y, 0px))) scale(var(--inv, 1)); transform-origin: 100% 50%; margin-left: -15rem; }
+
+.map-bar {
+  display: flex; align-items: center; gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+.map-hint { font-family: var(--sans); font-size: 0.75rem; color: var(--muted); margin-left: 0.35rem; }
+
+@media (max-width: 600px) {
+  /* A 2.6:1 strip is about 135px tall on a phone, which puts pins that are
+     a few hundred miles apart on top of each other. A squarer box stretches the map a
+     little but gives the pins room to separate; zoom in for the real shape. */
+  .map-viewport { aspect-ratio: 2 / 1; }
+}
+
+/* Where there is no hover there is no room either: a card floating beside its
+   pin is cut off by the edge of the map, which is what happens to a pin near an edge.
+   On a touch screen the tapped city is written out under the map instead, in
+   that pin's colour, with the link carried on. site.js builds it. */
+@media (hover: none) {
+  .pin-card { display: none; }
+}
+
+.map-detail { display: none; }
+.map-detail.is-shown {
+  display: block;
+  margin: 0.75rem 0 1.25rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--hairline);
+  border-left: 3px solid var(--accent);
+}
+.map-detail strong {
+  display: block;
+  font-family: var(--sans); font-size: 0.9375rem; font-weight: 700; letter-spacing: -0.015em;
+}
+.map-detail .meta { margin-top: 0.1rem; }
+.map-detail p { font-size: 0.875rem; line-height: 1.4; margin-top: 0.35rem; }
+.map-detail .map-detail-go {
+  display: inline-block; margin-top: 0.55rem;
+  font-family: var(--sans); font-size: 0.8125rem;
+}
+
+/* ---------- the route ----------
+   Cities read top to bottom down a line, each marked with a square in one of
+   the site's colours — the same marker the sidebar uses. */
+
+.journey {
+  list-style: none;
+  margin: 0 0 0 0.4rem;
+  padding: 0;
+  border-left: 2px solid var(--hairline);
+}
+.stop {
+  position: relative;
+  padding: 0 0 2.25rem 2.25rem;
+}
+.stop:last-child { padding-bottom: 0; }
+.stop::before {
+  content: "";
+  position: absolute; left: -8px; top: 0.35rem;
+  width: 14px; height: 14px;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--paper);
+}
+.stop h3 {
+  font-family: var(--sans);
+  font-size: 1.125rem; font-weight: 700; letter-spacing: -0.015em; line-height: 1.2;
+  margin-top: 0.2rem;
+}
+.stop p:last-child { margin-top: 0.35rem; max-width: var(--prose); }
+
+@media (max-width: 600px) {
+  .stop { padding-left: 1.6rem; }
+}
+
+/* photo strip under a role */
+
+/* Fits as many photos across as the space allows, so a strip can hold three
+   or eight without anything being changed here. */
+.strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+/* ---------- the lightbox ----------
+   Clicking a photo in a strip opens it large. The arrows move through that
+   strip only, never into another one. Built by site.js. */
+
+.strip .media img { cursor: zoom-in; }
+
+.lightbox {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(18, 20, 23, 0.95);
+  display: grid; grid-template-rows: 1fr auto;
+  padding: clamp(1rem, 4vw, 3rem);
+}
+.lightbox[hidden] { display: none; }
+
+/* One fixed box for every photo, so an upright one and a wide one sit in the
+   same place and the arrows underneath never move as you step through. */
+.lightbox-stage {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: min(68vh, 100%); min-height: 0;
+}
+/* Medium, not full-screen — big enough to look at properly, small enough that
+   it still reads as a photo on a page rather than taking the whole window. */
+.lightbox-stage img {
+  max-width: min(100%, 720px);
+  max-height: 100%;
+  width: auto; height: auto; object-fit: contain;
+}
+
+.lightbox-bar {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0.75rem; padding-top: 1.25rem;
+}
+.lightbox-btn {
+  appearance: none; cursor: pointer;
+  width: 2.5rem; height: 2.5rem;
+  display: grid; place-items: center;
+  background: none; padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+  transition: background-color var(--t) ease, color var(--t) ease, border-color var(--t) ease;
+}
+.lightbox-btn:hover:not([disabled]) { background: #fff; color: #15171A; border-color: #fff; }
+.lightbox-btn[disabled] { opacity: 0.3; cursor: default; }
+.lightbox-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+
+.lightbox-close { position: absolute; top: clamp(1rem, 4vw, 3rem); right: clamp(1rem, 4vw, 3rem); }
+
+.lightbox-count {
+  font-family: var(--sans); font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-variant-numeric: tabular-nums;
+  min-width: 4ch; text-align: center;
+}
+
+/* ---------- logo band ---------- */
+
+.band { margin-top: 4rem; }
+.band-title {
+  font-family: var(--sans);
+  font-size: 1.125rem; font-weight: 700; letter-spacing: -0.015em;
+  border-top: 2px solid var(--accent);
+  padding-top: 0.75rem; margin-bottom: 1.5rem;
+}
+.carousel--logos .media--logo { padding: 0 0.5rem; }
+.carousel--logos .media--logo img {
+  object-position: center;
+  filter: grayscale(1); opacity: 0.65;
+  transition: filter var(--t) ease, opacity var(--t) ease;
+}
+.carousel--logos .media--logo:hover img { filter: none; opacity: 1; }
+
+/* ---------- carousel ---------- */
+
+.carousel { --per: 1; --slide-gap: 0.75rem; }
+.carousel--thirds { --per: 3; }
+.carousel--logos { --per: 5; }
+
+.carousel-track {
+  display: flex;
+  gap: var(--slide-gap);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overscroll-behavior-x: contain;
+}
+.carousel-track::-webkit-scrollbar { display: none; }
+.carousel-track > .media {
+  flex: 0 0 calc((100% - (var(--per) - 1) * var(--slide-gap)) / var(--per));
+  scroll-snap-align: start;
+}
+
+.carousel-controls {
+  display: flex; align-items: center; gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+.carousel-controls[hidden] { display: none; }
+
+.carousel-btn {
+  appearance: none;
+  width: 2rem; height: 2rem;
+  display: grid; place-items: center;
+  background: none;
+  border: 1px solid var(--hairline);
+  color: var(--ink);
+  cursor: pointer;
+  padding: 0;
+  transition: background-color var(--t) ease, border-color var(--t) ease, color var(--t) ease;
+}
+.carousel-btn:hover:not([disabled]) {
+  background: var(--accent-ink); border-color: var(--accent-ink); color: var(--paper);
+}
+.carousel-btn[disabled] { opacity: 0.3; cursor: default; }
+.carousel-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+
+.carousel-count {
+  font-family: var(--sans); font-size: 0.75rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  margin-left: 0.35rem;
+}
+
+/* ---------- embeds ---------- */
+
+/* A Spotify player needs about 300px before it starts scrolling inside itself,
+   which is more than the media column has — so it lives in the body, capped so
+   it does not stretch the whole width. */
+.embed { max-width: 100%; margin-top: 1.35rem; }
+.embed iframe { display: block; width: 100%; border: 0; }
+
+/* ---------- collaborations ---------- */
+
+.offer-list { margin-top: 2.5rem; }
+.offer-item {
+  display: grid; grid-template-columns: 250px minmax(0, 1fr);
+  gap: 2rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--hairline);
+  transition: background-color var(--t) ease;
+}
+.offer-item:hover { background: var(--accent-soft); }
+.offer-list .offer-item:last-child { border-bottom: 1px solid var(--hairline); }
+.offer-item h2 { font-family: var(--sans); font-size: 1.3125rem; font-weight: 600; letter-spacing: -0.015em; line-height: 1.25; }
+.offer-item p { max-width: var(--prose); }
+
+.prose-after { margin-top: 2.5rem; }
+
+/* ---------- resources ----------
+   Other people's work, shown as covers and artwork rather than a list of
+   links — a shelf you can look at. Each item is a picture, a title and who
+   made it. The grid decides its own number of columns from the space it has. */
+
+/* The min() is what keeps two things across on a phone. Left as a plain
+   minmax, a 170px minimum could not fit twice into a 350px screen and every
+   item got a row to itself; capping the minimum at 45% of the row guarantees
+   a pair. On a wide screen the percentage never binds. */
+.goods {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--min, 150px), 45%), 1fr));
+  gap: 1.5rem 1.25rem;
+}
+.good-title {
+  font-family: var(--serif);
+  font-size: 1rem; font-weight: 500; line-height: 1.3;
+  margin-top: 0.6rem;
+}
+.good-title a { color: var(--ink); text-decoration: none; }
+.good-title a:hover { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 0.15em; }
+.good-source { margin-top: 0.15rem; }
+
+/* Book covers come in odd proportions and must not be cropped. */
+.media--cover { background: var(--fill); }
+.media--cover img { object-fit: contain; }
+
+/* A brand mark, shown whole on a light ground with room around it, rather
+   than cropped to fill a box like a photograph. */
+.media--mark { background: var(--fill); }
+.media--mark img { object-fit: contain; object-position: center; padding: 14%; }
+
+/* A grid of Spotify players. Each brings its own artwork and title. */
+.embeds {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.25rem 1rem;
+}
+.embeds iframe { display: block; width: 100%; height: 152px; border: 0; }
+.embed-slot {
+  display: grid; place-items: center; text-align: center;
+  min-height: 152px; padding: 1rem;
+  background: var(--fill); color: var(--muted);
+  font-family: var(--sans); font-size: 0.8125rem; line-height: 1.45;
+}
+
+/* ---------- contact ---------- */
+
+.contact-list { margin-top: 2.5rem; }
+.contact-item {
+  display: grid; grid-template-columns: 150px minmax(0, 1fr);
+  gap: 1.5rem; align-items: baseline;
+  padding: 1.1rem 0;
+  border-top: 1px solid var(--hairline);
+}
+.contact-list .contact-item:last-child { border-bottom: 1px solid var(--hairline); }
+
+/* The value sits at the same weight as its label rather than at body size. */
+.contact-value {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.75rem;
+  font-family: var(--sans); font-size: 0.9375rem;
+}
+
+/* ---------- the contact form ----------
+   No server behind it. On submit, site.js builds a mailto: out of the fields
+   and hands it to the visitor's own mail app, already filled in. */
+
+.contact-form { margin-top: 1.5rem; max-width: 34rem; }
+
+.field { margin: 0 0 1.25rem; border: 0; padding: 0; }
+.field label, .field legend {
+  display: block; padding: 0;
+  font-family: var(--sans); font-size: 0.8125rem; color: var(--muted);
+  margin-bottom: 0.45rem;
+}
+.field input, .field textarea {
+  width: 100%;
+  font-family: var(--sans); font-size: 0.9375rem; color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  padding: 0.55rem 0.7rem;
+  transition: border-color var(--t) ease;
+}
+.field input:focus, .field textarea:focus { border-color: var(--accent); }
+.field textarea { resize: vertical; min-height: 8rem; line-height: 1.5; }
+
+.btn-send {
+  appearance: none; cursor: pointer;
+  font-family: var(--sans); font-size: 0.9375rem; font-weight: 500;
+  background: var(--accent-ink); color: var(--paper);
+  border: 1px solid var(--accent-ink);
+  padding: 0.6rem 1.35rem;
+  transition: background-color var(--t) ease, color var(--t) ease;
+}
+.btn-send:hover { background: var(--paper); color: var(--accent-ink); }
+.form-note { margin-top: 1rem; max-width: 46ch; }
+
+/* click to copy, with the button reporting back in place */
+.copy-btn {
+  appearance: none; cursor: pointer;
+  background: none; border: 1px solid var(--hairline);
+  color: var(--muted);
+  font-family: var(--sans); font-size: 0.75rem;
+  padding: 0.2rem 0.55rem;
+  transition: background-color var(--t) ease, border-color var(--t) ease, color var(--t) ease;
+}
+.copy-btn:hover { border-color: var(--accent); color: var(--accent-ink); }
+.copy-btn[data-state="done"] {
+  background: var(--accent-ink); border-color: var(--accent-ink); color: var(--paper);
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+/* The honeypot. Off-screen rather than display:none, because some bots skip
+   anything that is genuinely hidden. */
+.honey {
+  position: absolute; left: -9999px;
+  width: 1px; height: 1px; overflow: hidden;
+}
+.chip {
+  appearance: none; cursor: pointer;
+  background: none; border: 1px solid var(--hairline);
+  color: var(--ink);
+  font-family: var(--sans); font-size: 0.875rem;
+  padding: 0.4rem 0.85rem;
+  transition: background-color var(--t) ease, border-color var(--t) ease, color var(--t) ease;
+}
+.chip:hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-ink); }
+.chip[aria-pressed="true"] {
+  background: var(--accent-ink); border-color: var(--accent-ink); color: var(--paper);
+}
+
+/* ---------- narrow screens ---------- */
+
+/* The sidebar becomes a top bar with a Menu button. The links do not wrap
+   across the top — they drop into a panel that keeps the same grouped list. */
+@media (max-width: 900px) {
+  .page { display: block; }
+  .content { padding-top: 0; }
+  .sidebar {
+    position: static; max-height: none; overflow: visible;
+    flex-direction: row; flex-wrap: wrap; align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    padding: 1.25rem 0 1rem;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .nav-toggle { display: inline-flex; }
+
+  .sidebar .site-nav { display: none; width: 100%; }
+  .sidebar.is-open .site-nav { display: block; padding-top: 0.5rem; }
+
+  .site-nav a { padding: 0.5rem 0.5rem; }
+  .nav-group-label { margin-top: 1.1rem; }
+}
+
+@media (max-width: 820px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-media { max-width: 26rem; }
+  .hero-bio { margin-top: 1.75rem; }
+
+  .row-body { max-width: none; }
+
+  .section-block h2 { font-size: 1.3125rem; }
+  /* the two columns stack, text first whichever way round the block is */
+  .section-block,
+  .section-block--flip { grid-template-columns: 1fr; gap: 1.25rem; }
+  .section-text,
+  .section-block--flip .section-text { grid-column: 1; grid-row: 1; }
+  .section-block > .carousel,
+  .section-block--flip > .carousel { grid-column: 1; grid-row: 2; }
+
+  .carousel--thirds { --per: 2; }
+  .carousel--logos { --per: 3; }
+  .contact-item { grid-template-columns: 1fr; gap: 0.25rem; }
+  .offer-item { grid-template-columns: 1fr; gap: 0.5rem; }
+  .goods { gap: 1.25rem 1rem; }
+}
+
+/* Only on a genuinely narrow screen does a row stack, media first. */
+@media (max-width: 600px) {
+  .row { grid-template-columns: 1fr; gap: 1.25rem; }
+
+  /* Logo rows keep the mark beside the words rather than stacking. Stacked, a
+     lone logo left a wide empty band above the text, and on Exploring the drawn
+     icon floated on its own with the writing pushed below it. */
+  .row--org,
+  .accent-airtime .row--org {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+  }
+  /* Only the mark in the left-hand column. Without the child combinator this
+     also caught every photograph in a strip further down the row and squashed
+     it to the width of a logo. */
+  .row--org > .row-media .media { width: 64px; }
+
+  /* Speaking centres its logos on a wide screen so the text lines up down the
+     page. In a 64px column there is nothing to line up with, and centred marks
+     read as a mistake next to the left-aligned ones everywhere else. */
+  .accent-airtime .row--org .media--logo { width: 64px; margin-inline: 0; }
+  .accent-airtime .row--org .media--logo img { object-position: left center; }
+
+  /* An upright magazine cover at full width is taller than the screen, and
+     stacked it left the headline stranded underneath while every row above it
+     read mark-left, words-right. A cover behaves like a logo here: same column
+     width, so the text lines up straight down the page. The copy of the page
+     itself, further down inside the body, is left at a readable size. */
+  .row:has(> .row-media .media--cover) {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+  }
+  .row > .row-media .media--cover { max-width: 64px; }
+  .row-body .media--cover { max-width: 13rem; }
+
+  .embed { max-width: none; }
+}
+
+@media (max-width: 520px) {
+  /* The name and the Menu button stay on one line. Stacked, they ate the top
+     of every page before you reached any of it. */
+  .site-nav ul { gap: 0.2rem 0.3rem; }
+  .carousel--thirds { --per: 1; }
+  .carousel--logos { --per: 2; }
+}
+
+/* ---------- reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-track { scroll-behavior: auto; }
+  * { animation: none !important; transition: none !important; }
+  /* the hover states still change, they just change instantly */
+  .media-label { transform: translateY(101%); }
+  .media a:hover img, .media a:focus-visible img { transform: none; }
+}
