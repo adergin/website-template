@@ -1,4 +1,9 @@
 /* ============================================================
+   Template by Deniz Ergin
+   https://denizergin.com  ·  https://github.com/adergin/website-template
+   MIT licensed. Please keep this notice and the LICENSE file.
+   ============================================================ */
+/* ============================================================
    Your Name — site.js
 
    1. Missing images become a grey block with the filename printed in it.

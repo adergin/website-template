@@ -138,6 +138,11 @@ nothing to build, so there is nothing to configure.
 ## Licence
 
 MIT, see `LICENSE`. Use it, change it, publish it, sell what you make with it.
-Attribution is welcome but not required.
 
-The map outlines are Natural Earth, public domain.
+The one thing the licence does ask is that you keep the copyright notice with
+the code. There is a comment at the top of every page, and at the top of
+`styles.css` and `site.js`, saying where the template came from. None of it
+shows on the page, so it costs your visitors nothing. Please leave it there,
+along with the `LICENSE` file.
+
+The map outlines are Natural Earth, public domain, and carry no conditions.
